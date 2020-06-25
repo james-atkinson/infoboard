@@ -1,0 +1,58 @@
+{
+  "name": "infoboard",
+  "version": "0.0.1",
+  "private": false,
+  "description": "A theamable framework for creating information display boards both public and private",
+  "author": {
+    "name": "James Atkinson",
+    "email": "james@theatkinsons.ca"
+  },
+  "scripts": {
+    "start:server": "nodemon --watch server/ --watch package.json --ignore *.spec.js",
+    "start:client": "vue-cli-service serve",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "main": "main.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "core-js": "^3.6.5",
+    "cors": "^2.8.5",
+    "date-fns": "^2.14.0",
+    "express": "^4.17.1",
+    "http": "^0.0.1-security",
+    "path": "^0.12.7",
+    "vue": "^2.6.11",
+    "vue-router": "^3.2.0",
+    "vuex": "^3.4.0",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.4.0",
+    "@vue/cli-plugin-eslint": "~4.4.0",
+    "@vue/cli-plugin-router": "~4.4.0",
+    "@vue/cli-plugin-vuex": "~4.4.0",
+    "@vue/cli-service": "~4.4.0",
+    "@vue/eslint-config-airbnb": "^5.0.2",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^4.12.0",
+    "nodemon": "^2.0.4",
+    "sass-loader": "^8.0.2",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "_id": "infoboard@0.0.1",
+  "bugs": {
+    "url": "https://github.com/james-atkinson/infoboard/issues"
+  },
+  "homepage": "https://github.com/james-atkinson/infoboard#readme",
+  "license": "GNU General Public License v3.0",
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/james-atkinson/infoboard.git"
+  }
+}
