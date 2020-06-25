@@ -1,0 +1,54 @@
+{
+  "name": "familyCalender",
+  "canvas": {
+    "width": "1920px",
+    "height": "1080px",
+    "backgroundColor": "black"
+  },
+  "layers": {
+    "BackgroundLayer": {
+      "zIndex": "1000",
+      "config": {
+        "gridColumnGap": "0",
+        "gridRowGap": "0"
+      },
+      "widgets": {
+        "BackgroundImageWidget": {
+          "config": {},
+          "position": {
+            "rowStart": 1,
+            "rowEnd": 13,
+            "columnStart": 1,
+            "columnEnd": 13
+          }
+        }
+      }
+    },
+    "MainLayer": {
+      "zIndex": "2000",
+      "config": {
+        "gridColumnGap": "5px",
+        "gridRow,Gap": "5px"
+      },
+      "widgets": {
+        "DateTimeWidget": {
+          "config": {},
+          "position": {
+            "rowStart": 1,
+            "rowEnd": 3,
+            "columnStart": 1,
+            "columnEnd": 4
+          }
+        }
+      }
+    },
+    "OverlayLayer": {
+      "zIndex": "3000",
+      "config": {
+        "gridColumnGap": "5px",
+        "gridRowGap": "5px"
+      },
+      "widgets": {}
+    }
+  }
+}
