@@ -1,18 +1,27 @@
 <template>
   <div class="widget datetimewidget">
-    <div class="datetimewidget__date">Thursday, December 25, 2020</div>
-    <div class="datetimewidget__time">8:59</div>
+    <div class="datetimewidget__date">{{ date }}</div>
+    <div class="datetimewidget__time">{{ time }}</div>
   </div>
 </template>
 <script>
 import { format } from 'date-fns';
 
+const dateFormat = 'iiii LLL do, yyyy';
+const timeFormat = 'h:mm';
+
 export default {
   name: 'DateTimeWidget',
   data: () => ({
-    date: format(new Date(), 'iiii LLL do, yyyy'),
-    time: format(new Date(), 'h:mm a'),
+    date: format(new Date(), dateFormat),
+    time: format(new Date(), timeFormat),
   }),
+  created() {
+    setInterval(() => {
+      this.date = format(new Date(), dateFormat);
+      this.time = format(new Date(), timeFormat);
+    }, 30000);
+  },
 };
 </script>
 <style lang="scss" scoped>
