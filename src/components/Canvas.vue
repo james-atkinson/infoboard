@@ -21,14 +21,7 @@
 import axios from 'axios';
 import { mapState } from 'vuex';
 import { serverUrl } from '../config.json';
-
-const components = {
-  familyCalendar: {
-    BackgroundLayer: () => import('../themes/familyCalendar/layers/BackgroundLayer.vue'),
-    MainLayer: () => import('../themes/familyCalendar/layers/MainLayer.vue'),
-    OverlayLayer: () => import('../themes/familyCalendar/layers/OverlayLayer.vue'),
-  },
-};
+import * as themeComponents from '../themes/themeComponents';
 
 export default {
   name: 'Canvas',
@@ -46,9 +39,10 @@ export default {
     }),
     displayLayers() {
       if (!this.themeName) return {};
+      if (!themeComponents[this.themeName]) return {};
       return Object.keys(this.layers).map((componentName) => ({
         id: componentName,
-        component: components[this.themeName][componentName],
+        component: themeComponents[this.themeName].layers[componentName],
         config: this.layers[componentName].config,
         zIndex: this.layers[componentName].zIndex,
         widgets: this.layers[componentName].widgets,

@@ -17,9 +17,7 @@
   </div>
 </template>
 <script>
-const components = {
-  DateTimeWidget: () => import('../widgets/DateTimeWidget.vue'),
-};
+import { widgets } from '../components';
 
 export default {
   name: 'MainLayer',
@@ -37,7 +35,7 @@ export default {
     displayWidgets() {
       return Object.keys(this.widgets).map((widgetName) => ({
         id: widgetName,
-        component: components[widgetName],
+        component: widgets[widgetName],
         config: this.widgets[widgetName].config,
         position: this.widgets[widgetName].position,
       }));
