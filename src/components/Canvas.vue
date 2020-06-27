@@ -7,48 +7,62 @@
       background-color: ${config.backgroundColor};`"
   >
     <component
-      v-for="layer in layers"
+      v-for="layer in displayLayers"
       :key="layer.id"
       :is="layer.component"
       :ref="`layer-${layer.id}`"
+      :style="`z-index: ${layer.zIndex}`"
       v-bind="layer"
     />
   </div>
 </template>
 
 <script>
-import BackgroundLayer from '../themes/familyCalendar/layers/BackgroundLayer.vue';
-import MainLayer from '../themes/familyCalendar/layers/MainLayer.vue';
-import OverlayLayer from '../themes/familyCalendar/layers/OverlayLayer.vue';
+import axios from 'axios';
+import { mapState } from 'vuex';
+import { serverUrl } from '../config.json';
+
+const components = {
+  familyCalendar: {
+    BackgroundLayer: () => import('../themes/familyCalendar/layers/BackgroundLayer.vue'),
+    MainLayer: () => import('../themes/familyCalendar/layers/MainLayer.vue'),
+    OverlayLayer: () => import('../themes/familyCalendar/layers/OverlayLayer.vue'),
+  },
+};
 
 export default {
   name: 'Canvas',
-  components: { BackgroundLayer, MainLayer, OverlayLayer },
   props: {
     config: {
       type: Object,
       required: true,
     },
   },
-  data: () => ({
-    layers: [
-      {
-        id: 'BackgroundLayer',
-        component: BackgroundLayer,
-        config: {
-          gridColumnGap: '0',
-          gridRowGap: '0',
-        },
-        zIndex: 1000,
-      },
-      {
-        id: 'MainLayer', component: MainLayer, config: { gridColumnGap: '5px', gridRowGap: '5px' }, zIndex: 2000,
-      },
-      {
-        id: 'OverlayLayer', component: OverlayLayer, config: {}, zIndex: 3000,
-      },
-    ],
-  }),
+  computed: {
+    ...mapState({
+      themeName: (state) => state.config.name,
+      canvasConfig: (state) => state.config.canvas,
+      layers: (state) => state.config.layers,
+    }),
+    displayLayers() {
+      if (!this.themeName) return {};
+      return Object.keys(this.layers).map((componentName) => ({
+        id: componentName,
+        component: components[this.themeName][componentName],
+        config: this.layers[componentName].config,
+        zIndex: this.layers[componentName].zIndex,
+        widgets: this.layers[componentName].widgets,
+      }));
+    },
+  },
+  async created() {
+    const configPath = `${serverUrl}/api/config`;
+    const serverResponse = await axios.get(configPath);
+    const serverResponseGood = serverResponse.status === 200;
+    const themeConfig = serverResponseGood ? serverResponse.data.configuredThemeConfig : {};
+
+    this.$store.dispatch('setConfig', { config: themeConfig });
+  },
 };
 </script>
 

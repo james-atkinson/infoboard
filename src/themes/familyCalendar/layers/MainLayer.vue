@@ -5,7 +5,7 @@
               grid-row-gap: ${config.gridRowGap || 0};`"
   >
     <component
-      v-for="widget in widgets"
+      v-for="widget in displayWidgets"
       :key="widget.id"
       :is="widget.component"
       :ref="`widget-${widget.id}`"
@@ -17,31 +17,31 @@
   </div>
 </template>
 <script>
-import DateTimeWidget from '../widgets/DateTimeWidget.vue';
+const components = {
+  DateTimeWidget: () => import('../widgets/DateTimeWidget.vue'),
+};
 
 export default {
   name: 'MainLayer',
-  components: { DateTimeWidget },
   props: {
     config: {
       type: Object,
       required: true,
     },
+    widgets: {
+      type: Object,
+      required: true,
+    },
   },
-  data: () => ({
-    widgets: [
-      {
-        id: 'BackgroundImageWidget',
-        component: DateTimeWidget,
-        config: {},
-        position: {
-          rowStart: 1,
-          rowEnd: 3,
-          columnStart: 1,
-          columnEnd: 4,
-        },
-      },
-    ],
-  }),
+  computed: {
+    displayWidgets() {
+      return Object.keys(this.widgets).map((widgetName) => ({
+        id: widgetName,
+        component: components[widgetName],
+        config: this.widgets[widgetName].config,
+        position: this.widgets[widgetName].position,
+      }));
+    },
+  },
 };
 </script>

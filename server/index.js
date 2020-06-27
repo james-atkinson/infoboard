@@ -1,8 +1,7 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const http = require('http');
-
 
 const logger = require('../lib/logger');
 const { registerRoutes } = require('./controllers');
@@ -20,7 +19,7 @@ const createExpressServer = (serverOptions) => {
   const expressApp = express();
 
   expressApp.use(cors({
-    origin: "http://localhost:9100"
+    origin: 'http://localhost:8080',
   }));
 
   expressApp.use(bodyParser.json());
