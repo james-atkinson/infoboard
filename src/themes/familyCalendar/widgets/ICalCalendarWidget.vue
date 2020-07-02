@@ -114,6 +114,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(6, 1fr);
+  margin-right: 1rem;
 
   &__header {
     color: white;
@@ -122,7 +123,6 @@ export default {
     font-weight: 800;
     text-align: right;
     align-self: end;
-    margin-right: 1rem;
   }
 
   &__day {
