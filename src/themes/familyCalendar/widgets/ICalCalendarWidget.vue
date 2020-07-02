@@ -1,0 +1,172 @@
+<template>
+  <div class="icalcalendar">
+    <div class="icalcalendar__header">
+      {{ currentMonth }}
+    </div>
+    <div
+      v-for="(day, index) in days"
+      :key="index"
+      :style="`grid-area: ${day.gridRow} / ${day.gridColumn} / ${day.gridRow} / ${day.gridColumn};`"
+      class="icalcalendar__day"
+    >
+      <div class="icalcalendar__day--number">{{ day.number }}</div>
+      <div
+        v-for="event in day.events"
+        :key="event.uid"
+        :class="`icalcalendar__day--${event.isAllDay ? 'alldayevent' : 'event'}`"
+      >
+        {{ event.summary }}
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import axios from 'axios';
+import ical from 'ical';
+import { cloneDeep } from 'lodash';
+import { format, isWithinInterval, isSameDay } from 'date-fns';
+import { serverUrl } from '../../../config.json';
+
+export default {
+  name: 'ICalCalendarWidget',
+  props: {
+    config: {
+      type: Object,
+      required: true,
+    },
+  },
+  data: () => ({
+    currentMonth: '',
+    currentEvents: [],
+    days: [],
+  }),
+  async created() {
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getYear();
+    const rawIcalData = await axios.get(`${serverUrl}/api/fetchData?url=https://calendar.google.com/calendar/ical/43qdrbpgrlb9uqn2585or2bavs%40group.calendar.google.com/private-7106fe3b84123d2ada29cf23537fa78c/basic.ics`);
+    const icalData = Object.values(ical.parseICS(rawIcalData.data));
+
+    this.currentEvents = icalData.filter((entry) => {
+      if (entry.type !== 'VEVENT') return false;
+
+      const entryStartMonth = entry.start.getMonth();
+      const entryStartYear = entry.start.getYear();
+      const entryEndMonth = entry.end.getMonth();
+      const entryEndYear = entry.end.getYear();
+
+      return (entryStartYear === currentYear && entryStartMonth === currentMonth) || (entryEndMonth === currentMonth && entryEndYear === currentYear);
+    });
+
+    this.currentMonth = format(new Date(), 'MMMM');
+
+    const firstDayOfMonth = (new Date()).getDay();
+    console.log('firstDayOfMonth', firstDayOfMonth);
+    const daysInMonth = 32 - (new Date(new Date().getYear(), new Date().getMonth(), 32).getDate());
+
+    let daysCreated = 1;
+    for (let row = 2; row < 8; row++) { // eslint-disable-line
+      for (let column = 1; column < 8; column++) { // eslint-disable-line
+        if (daysCreated > daysInMonth) break;
+        const dayIsInMonth = (row === 2 && column >= firstDayOfMonth) || row > 2;
+        const dayNumber = dayIsInMonth ? cloneDeep(daysCreated) : '';
+        const dateTimeOfDay = dayIsInMonth ? new Date(new Date().getFullYear(), currentMonth, dayNumber, 12, 0, 0, 0) : null;
+        const day = {
+          number: dayNumber,
+          gridRow: row,
+          gridColumn: column,
+          events: [],
+        };
+
+        const daysEvents = this.currentEvents.filter((event) => {
+          const { start, end } = event;
+          const eventSpansDay = isWithinInterval(dateTimeOfDay, { start, end });
+          const eventOnDay = isSameDay(start, end) && isSameDay(start, dateTimeOfDay);
+          return eventSpansDay || eventOnDay;
+        });
+
+        day.events = daysEvents.map((event) => {
+          const { summary, start, end } = event;
+          const isAllDay = !isSameDay(start, end);
+          return {
+            isAllDay,
+            summary: isAllDay ? summary : `${format(start, 'h:mm a')} - ${summary}`,
+          };
+        });
+
+        dayIsInMonth && daysCreated++; // eslint-disable-line
+        this.days.push(day);
+      }
+    }
+  },
+};
+</script>
+<style lang="scss" scoped>
+.icalcalendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+
+  &__header {
+    color: white;
+    grid-area: 1 / 1 / 1 / 8;
+    font-size: 3.2rem;
+    font-weight: 800;
+    text-align: right;
+    margin-right: 1rem;
+  }
+
+  &__day {
+    color: white;
+    background: rgba($color: #000000, $alpha: 0.5);
+    border: solid 1px white;
+    padding-top: 0.2rem;
+    padding-right: 0.2rem;
+    max-width: 15rem;
+    font-weight: 500;
+
+    &--number {
+      width: 100%;
+      text-align: right;
+    }
+
+    &--alldayevent {
+      color: black;
+      background-color: rgb(248, 211, 45);
+      border: solid 1px rgb(248, 211, 45);
+      border-radius: 3px;
+      margin: 0.3rem;
+      padding: 0.2rem 0.4rem 0.2rem 0.2rem;
+      font-size: 0.9rem;
+      text-align: right;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &--event {
+      color: white;
+      margin: 0.3rem;
+      padding: 0.2rem 0.2rem 0.2rem 0.4rem;
+      font-size: 0.9rem;
+      text-align: left;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 0.6rem;
+        height: 0.6rem;
+        -moz-border-radius: 7.5px;
+        -webkit-border-radius: 7.5px;
+        border-radius: 7.5px;
+        background-color: rgb(248, 211, 45);
+      }
+    }
+  }
+
+}
+</style>

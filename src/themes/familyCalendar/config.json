@@ -39,6 +39,15 @@
             "columnStart": 1,
             "columnEnd": 4
           }
+        },
+        "ICalCalendarWidget": {
+          "config": {},
+          "position": {
+            "rowStart": 1,
+            "rowEnd": 11,
+            "columnStart": 4,
+            "columnEnd": 13
+          }
         }
       }
     },
