@@ -1,7 +1,7 @@
 <template>
   <div class="icalcalendar">
     <div class="icalcalendar__header">
-      {{ currentMonth }}
+      {{ currentMonth }} {{ currentYear }}
     </div>
     <div
       v-for="(day, index) in days"
@@ -9,6 +9,12 @@
       :style="`grid-area: ${day.gridRow} / ${day.gridColumn} / ${day.gridRow} / ${day.gridColumn};`"
       class="icalcalendar__day"
     >
+      <div
+        v-if="day.gridRow === 2"
+        class="icalcalendar__day--header"
+      >
+        {{ daysOfTheWeek[index] }}
+      </div>
       <div class="icalcalendar__day--number">{{ day.number }}</div>
       <div
         v-for="event in day.events"
@@ -37,8 +43,10 @@ export default {
   },
   data: () => ({
     currentMonth: '',
+    currentYear: '',
     currentEvents: [],
     days: [],
+    daysOfTheWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
   }),
   async created() {
     const currentMonth = new Date().getMonth();
@@ -58,6 +66,7 @@ export default {
     });
 
     this.currentMonth = format(new Date(), 'MMMM');
+    this.currentYear = new Date().getFullYear();
 
     const firstDayOfMonth = (new Date()).getDay();
     console.log('firstDayOfMonth', firstDayOfMonth);
@@ -112,17 +121,25 @@ export default {
     font-size: 3.2rem;
     font-weight: 800;
     text-align: right;
+    align-self: end;
     margin-right: 1rem;
   }
 
   &__day {
     color: white;
     background: rgba($color: #000000, $alpha: 0.5);
-    border: solid 1px white;
-    padding-top: 0.2rem;
-    padding-right: 0.2rem;
+    border: solid 1px rgba($color: #ffffff, $alpha: 0.5);
     max-width: 15rem;
     font-weight: 500;
+
+    &--header {
+      color: black;
+      background: rgba($color: #ffffff, $alpha: 0.8);
+      width: 100%;
+      text-align: center;
+      padding: 0;
+      margin: 0;
+    }
 
     &--number {
       width: 100%;
