@@ -38,14 +38,25 @@ export default {
     }),
     backgroundImageUrl() {
       const aspectRatio = Math.round((this.config.width / this.config.height) * 10) / 10;
-      const sortedImages = this.redditData ? this.redditData.filter((item) => {
+      const filteredImages = this.redditData ? this.redditData.filter((item) => {
         const itemAspectRatio = Math.round((item?.data?.preview?.images[0]?.source?.width / item?.data?.preview?.images[0]?.source?.height) * 10) / 10;
-        return itemAspectRatio === aspectRatio;
+        return this.config.ignoreAspectRatio ? true : itemAspectRatio === aspectRatio;
       }).map((item) => ({
         url: item?.data?.url,
         score: item?.data?.score,
-      })).sort((a, b) => b.score - a.score) : [];
-      return sortedImages[0]?.url;
+      })) : [];
+
+      if (this.config.selectionType === 'highest') {
+        const sortedImages = filteredImages.sort((a, b) => b.score - a.score);
+        return sortedImages[0]?.url;
+      }
+
+      if (this.config.selectionType === 'random') {
+        const random = Math.floor(Math.random() * Math.floor(filteredImages.length - 1));
+        return filteredImages[random]?.url;
+      }
+
+      return filteredImages[0]?.url;
     },
   },
 };

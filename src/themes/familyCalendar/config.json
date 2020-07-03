@@ -16,7 +16,9 @@
         "RedditBackgroundImageWidget": {
           "config": {
             "subreddit": "wallpapers",
+            "selectionType": "random",
             "interval": 30,
+            "ignoreAspectRatio": true,
             "width": 1920,
             "height": 1080
           },
