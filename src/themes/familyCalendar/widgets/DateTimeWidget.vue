@@ -7,7 +7,7 @@
 <script>
 import { format } from 'date-fns';
 
-const dateFormat = 'iiii LLL do, yyyy';
+const dateFormat = 'iiii LLLL do, yyyy';
 const timeFormat = 'h:mm';
 
 export default {

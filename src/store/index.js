@@ -5,6 +5,7 @@ import * as themeComponents from '../themes/themeComponents';
 Vue.use(Vuex);
 
 const SET_CONFIG = 'SET_CONFIG';
+const SET_DATA = 'SET_DATA';
 
 const storeModules = {};
 
@@ -16,10 +17,14 @@ export default new Vuex.Store({
   modules: storeModules,
   state: {
     config: {},
+    data: {},
   },
   mutations: {
     [SET_CONFIG](state, { config }) {
       state.config = config;
+    },
+    [SET_DATA](state, { key, data }) { // eslint-disable-line
+      Vue.set(state.data, key, data);
     },
   },
   actions: {
@@ -27,6 +32,13 @@ export default new Vuex.Store({
       commit({
         type: SET_CONFIG,
         config,
+      });
+    },
+    setData({ commit }, { key, data }) {
+      commit({
+        type: SET_DATA,
+        key,
+        data,
       });
     },
   },

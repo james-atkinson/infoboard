@@ -72,6 +72,8 @@ export default {
             widgets: this.layers[componentName].widgets,
           };
         }
+
+        return {};
       });
     },
     validDataComponents() {

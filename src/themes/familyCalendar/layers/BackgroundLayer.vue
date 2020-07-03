@@ -34,7 +34,6 @@ export default {
   },
   computed: {
     displayWidgets() {
-      console.log(themeComponents);
       const themeWidgets = themeComponents.widgets; // eslint-disable-line
       return Object.keys(this.widgets).map((widgetName) => {
         if (themeWidgets[widgetName]) {
