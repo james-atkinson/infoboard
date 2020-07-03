@@ -5,7 +5,7 @@
              grid-row-gap: ${config.gridRowGap || 0};`"
   >
     <component
-      v-for="widget in widgets"
+      v-for="widget in displayWidgets"
       :key="widget.id"
       :is="widget.component"
       :ref="`widget-${widget.id}`"
@@ -17,31 +17,47 @@
   </div>
 </template>
 <script>
-import BackgroundImageWidget from '../widgets/BackgroundImageWidget.vue';
+import * as themeComponents from '../components';
+import widgets from '../../../components/widgets';
 
 export default {
   name: 'BackgroundLayer',
-  components: { BackgroundImageWidget },
   props: {
     config: {
       type: Object,
       required: true,
     },
+    widgets: {
+      type: Object,
+      required: true,
+    },
   },
-  data: () => ({
-    widgets: [
-      {
-        id: 'BackgroundImageWidget',
-        component: BackgroundImageWidget,
-        config: {},
-        position: {
-          rowStart: 1,
-          rowEnd: 13,
-          columnStart: 1,
-          columnEnd: 13,
-        },
-      },
-    ],
-  }),
+  computed: {
+    displayWidgets() {
+      console.log(themeComponents);
+      const themeWidgets = themeComponents.widgets; // eslint-disable-line
+      return Object.keys(this.widgets).map((widgetName) => {
+        if (themeWidgets[widgetName]) {
+          return {
+            id: widgetName,
+            component: themeWidgets[widgetName],
+            config: this.widgets[widgetName].config,
+            position: this.widgets[widgetName].position,
+          };
+        }
+
+        if (widgets[widgetName]) {
+          return {
+            id: widgetName,
+            component: widgets[widgetName],
+            config: this.widgets[widgetName].config,
+            position: this.widgets[widgetName].position,
+          };
+        }
+
+        return {};
+      });
+    },
+  },
 };
 </script>

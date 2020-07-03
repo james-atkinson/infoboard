@@ -13,8 +13,10 @@
         "gridRowGap": "0"
       },
       "widgets": {
-        "BackgroundImageWidget": {
-          "config": {},
+        "StaticBackgroundImageWidget": {
+          "config": {
+            "backgroundImageUrl": "https://wallpapercave.com/wp/wp3103674.jpg"
+          },
           "position": {
             "rowStart": 1,
             "rowEnd": 13,

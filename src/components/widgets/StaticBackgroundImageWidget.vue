@@ -1,9 +1,12 @@
 <template>
-  <div class="background"></div>
+  <div
+    class="background"
+    :style="`background-image: url('${config.backgroundImageUrl}')`"
+  ></div>
 </template>
 <script>
 export default {
-  name: 'BackgroundImageWidget',
+  name: 'StaticBackgroundImageWidget',
   props: {
     config: {
       type: Object,
@@ -17,6 +20,5 @@ export default {
   opacity: 0.2;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: url('https://wallpapercave.com/wp/wp3103674.jpg');
 }
 </style>

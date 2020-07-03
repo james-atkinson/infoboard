@@ -31,6 +31,7 @@ import axios from 'axios';
 import { mapState } from 'vuex';
 import { serverUrl } from '../config.json';
 import * as themeComponents from '../themes/themeComponents';
+import widgets from './widgets';
 import dataComponents from './data';
 
 export default {
@@ -51,13 +52,27 @@ export default {
     displayLayers() {
       if (!this.themeName) return {};
       if (!themeComponents[this.themeName]) return {};
-      return Object.keys(this.layers).map((componentName) => ({
-        id: componentName,
-        component: themeComponents[this.themeName].layers[componentName],
-        config: this.layers[componentName].config,
-        zIndex: this.layers[componentName].zIndex,
-        widgets: this.layers[componentName].widgets,
-      }));
+      return Object.keys(this.layers).map((componentName) => {
+        if (themeComponents[this.themeName] && themeComponents[this.themeName].layers[componentName]) {
+          return {
+            id: componentName,
+            component: themeComponents[this.themeName].layers[componentName],
+            config: this.layers[componentName].config,
+            zIndex: this.layers[componentName].zIndex,
+            widgets: this.layers[componentName].widgets,
+          };
+        }
+
+        if (widgets && widgets[componentName]) {
+          return {
+            id: componentName,
+            component: widgets[componentName],
+            config: this.layers[componentName].config,
+            zIndex: this.layers[componentName].zIndex,
+            widgets: this.layers[componentName].widgets,
+          };
+        }
+      });
     },
     validDataComponents() {
       if (!this.themeName) return {};
