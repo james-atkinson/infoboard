@@ -1,11 +1,19 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import * as themeComponents from '../themes/themeComponents';
 
 Vue.use(Vuex);
 
 const SET_CONFIG = 'SET_CONFIG';
 
+const storeModules = {};
+
+for (const [key, value] of Object.entries(themeComponents)) { // eslint-disable-line
+  storeModules[key] = value.store;
+}
+
 export default new Vuex.Store({
+  modules: storeModules,
   state: {
     config: {},
   },

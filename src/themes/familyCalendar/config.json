@@ -59,5 +59,16 @@
       },
       "widgets": {}
     }
+  },
+  "data": {
+    "GenericDataFetcher": {
+      "config": {
+        "immediate": true,
+        "fetchUrl": "https://calendar.google.com/calendar/ical/43qdrbpgrlb9uqn2585or2bavs%40group.calendar.google.com/private-7106fe3b84123d2ada29cf23537fa78c/basic.ics",
+        "storeAction": "familyCalendar/setData",
+        "storeKey": "calendarData",
+        "interval": "1"
+      }
+    }
   }
 }

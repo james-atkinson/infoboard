@@ -27,11 +27,10 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
 import ical from 'ical';
+import { mapState } from 'vuex';
 import { cloneDeep } from 'lodash';
 import { format, isWithinInterval, isSameDay } from 'date-fns';
-import { serverUrl } from '../../../config.json';
 
 export default {
   name: 'ICalCalendarWidget',
@@ -44,68 +43,74 @@ export default {
   data: () => ({
     currentMonth: '',
     currentYear: '',
-    currentEvents: [],
-    days: [],
     daysOfTheWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
   }),
+  computed: {
+    ...mapState({
+      calendarData: (state) => state.familyCalendar.calendarData,
+    }),
+    days() {
+      const rawIcalData = this.calendarData;
+      if (!rawIcalData) return [];
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getYear();
+      const icalData = Object.values(ical.parseICS(rawIcalData));
+      const days = [];
+
+      const currentEvents = icalData.filter((entry) => {
+        if (entry.type !== 'VEVENT') return false;
+
+        const entryStartMonth = entry.start.getMonth();
+        const entryStartYear = entry.start.getYear();
+        const entryEndMonth = entry.end.getMonth();
+        const entryEndYear = entry.end.getYear();
+
+        return (entryStartYear === currentYear && entryStartMonth === currentMonth) || (entryEndMonth === currentMonth && entryEndYear === currentYear);
+      });
+
+      const firstDayOfMonth = (new Date()).getDay();
+      const daysInMonth = 32 - (new Date(new Date().getYear(), new Date().getMonth(), 32).getDate());
+
+      let daysCreated = 1;
+      for (let row = 2; row < 8; row++) { // eslint-disable-line
+        for (let column = 1; column < 8; column++) { // eslint-disable-line
+          if (daysCreated > daysInMonth) break;
+          const dayIsInMonth = (row === 2 && column >= firstDayOfMonth) || row > 2;
+          const dayNumber = dayIsInMonth ? cloneDeep(daysCreated) : '';
+          const dateTimeOfDay = dayIsInMonth ? new Date(new Date().getFullYear(), currentMonth, dayNumber, 12, 0, 0, 0) : null;
+          const day = {
+            number: dayNumber,
+            gridRow: row,
+            gridColumn: column,
+            events: [],
+          };
+
+          const daysEvents = currentEvents.filter((event) => {
+            const { start, end } = event;
+            const eventSpansDay = isWithinInterval(dateTimeOfDay, { start, end });
+            const eventOnDay = isSameDay(start, end) && isSameDay(start, dateTimeOfDay);
+            return eventSpansDay || eventOnDay;
+          });
+
+          day.events = daysEvents.map((event) => {
+            const { summary, start, end } = event;
+            const isAllDay = !isSameDay(start, end);
+            return {
+              isAllDay,
+              summary: isAllDay ? summary : `${format(start, 'h:mm a')} - ${summary}`,
+            };
+          });
+
+          dayIsInMonth && daysCreated++; // eslint-disable-line
+          days.push(day);
+        }
+      }
+      return days;
+    },
+  },
   async created() {
-    const currentMonth = new Date().getMonth();
-    const currentYear = new Date().getYear();
-    const rawIcalData = await axios.get(`${serverUrl}/api/fetchData?url=https://calendar.google.com/calendar/ical/43qdrbpgrlb9uqn2585or2bavs%40group.calendar.google.com/private-7106fe3b84123d2ada29cf23537fa78c/basic.ics`);
-    const icalData = Object.values(ical.parseICS(rawIcalData.data));
-
-    this.currentEvents = icalData.filter((entry) => {
-      if (entry.type !== 'VEVENT') return false;
-
-      const entryStartMonth = entry.start.getMonth();
-      const entryStartYear = entry.start.getYear();
-      const entryEndMonth = entry.end.getMonth();
-      const entryEndYear = entry.end.getYear();
-
-      return (entryStartYear === currentYear && entryStartMonth === currentMonth) || (entryEndMonth === currentMonth && entryEndYear === currentYear);
-    });
-
     this.currentMonth = format(new Date(), 'MMMM');
     this.currentYear = new Date().getFullYear();
-
-    const firstDayOfMonth = (new Date()).getDay();
-    console.log('firstDayOfMonth', firstDayOfMonth);
-    const daysInMonth = 32 - (new Date(new Date().getYear(), new Date().getMonth(), 32).getDate());
-
-    let daysCreated = 1;
-    for (let row = 2; row < 8; row++) { // eslint-disable-line
-      for (let column = 1; column < 8; column++) { // eslint-disable-line
-        if (daysCreated > daysInMonth) break;
-        const dayIsInMonth = (row === 2 && column >= firstDayOfMonth) || row > 2;
-        const dayNumber = dayIsInMonth ? cloneDeep(daysCreated) : '';
-        const dateTimeOfDay = dayIsInMonth ? new Date(new Date().getFullYear(), currentMonth, dayNumber, 12, 0, 0, 0) : null;
-        const day = {
-          number: dayNumber,
-          gridRow: row,
-          gridColumn: column,
-          events: [],
-        };
-
-        const daysEvents = this.currentEvents.filter((event) => {
-          const { start, end } = event;
-          const eventSpansDay = isWithinInterval(dateTimeOfDay, { start, end });
-          const eventOnDay = isSameDay(start, end) && isSameDay(start, dateTimeOfDay);
-          return eventSpansDay || eventOnDay;
-        });
-
-        day.events = daysEvents.map((event) => {
-          const { summary, start, end } = event;
-          const isAllDay = !isSameDay(start, end);
-          return {
-            isAllDay,
-            summary: isAllDay ? summary : `${format(start, 'h:mm a')} - ${summary}`,
-          };
-        });
-
-        dayIsInMonth && daysCreated++; // eslint-disable-line
-        this.days.push(day);
-      }
-    }
   },
 };
 </script>

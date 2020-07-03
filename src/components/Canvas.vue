@@ -1,18 +1,27 @@
 <template>
-  <div
-    class="canvas"
-    :style="`
-      width: ${config.width};
-      height: ${config.height};
-      background-color: ${config.backgroundColor};`"
-  >
+  <div>
+    <div
+      class="canvas"
+      :style="`
+        width: ${config.width};
+        height: ${config.height};
+        background-color: ${config.backgroundColor};`"
+    >
+      <component
+        v-for="layer in displayLayers"
+        :key="layer.id"
+        :is="layer.component"
+        :ref="`layer-${layer.id}`"
+        :style="`z-index: ${layer.zIndex}`"
+        v-bind="layer"
+      />
+    </div>
     <component
-      v-for="layer in displayLayers"
-      :key="layer.id"
-      :is="layer.component"
-      :ref="`layer-${layer.id}`"
-      :style="`z-index: ${layer.zIndex}`"
-      v-bind="layer"
+      v-for="dataComponent in validDataComponents"
+      :key="dataComponent.id"
+      :is="dataComponent.component"
+      :ref="`layer-${dataComponent.id}`"
+      v-bind="dataComponent"
     />
   </div>
 </template>
@@ -22,6 +31,7 @@ import axios from 'axios';
 import { mapState } from 'vuex';
 import { serverUrl } from '../config.json';
 import * as themeComponents from '../themes/themeComponents';
+import dataComponents from './data';
 
 export default {
   name: 'Canvas',
@@ -36,6 +46,7 @@ export default {
       themeName: (state) => state.config.name,
       canvasConfig: (state) => state.config.canvas,
       layers: (state) => state.config.layers,
+      dataComponents: (state) => state.config.data,
     }),
     displayLayers() {
       if (!this.themeName) return {};
@@ -47,6 +58,36 @@ export default {
         zIndex: this.layers[componentName].zIndex,
         widgets: this.layers[componentName].widgets,
       }));
+    },
+    validDataComponents() {
+      if (!this.themeName) return {};
+      if (!themeComponents[this.themeName]) return {};
+      if (!this.dataComponents) return {};
+
+      const globalDataComponents = dataComponents;
+      const themeDataComponents = themeComponents[this.themeName].data;
+
+      const result = Object.keys(this.dataComponents).map((componentName) => {
+        if (globalDataComponents[componentName]) {
+          return {
+            id: componentName,
+            component: globalDataComponents[componentName],
+            config: this.dataComponents[componentName].config,
+          };
+        }
+
+        if (themeDataComponents[componentName]) {
+          return {
+            id: componentName,
+            component: themeDataComponents[componentName],
+            config: this.dataComponents[componentName].config,
+          };
+        }
+
+        return false;
+      }).filter((component) => component !== false);
+
+      return result;
     },
   },
   async created() {
