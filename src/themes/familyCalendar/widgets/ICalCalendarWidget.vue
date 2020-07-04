@@ -15,7 +15,7 @@
       >
         {{ daysOfTheWeek[index] }}
       </div>
-      <div class="icalcalendar__day--number">{{ day.number }}</div>
+      <div :class="`icalcalendar__day--number ${day.isCurrentDay ? 'current' :''}`">{{ day.number }}</div>
       <div
         v-for="event in day.events"
         :key="event.uid"
@@ -54,6 +54,7 @@ export default {
       if (!rawIcalData) return [];
       const currentMonth = new Date().getMonth();
       const currentYear = new Date().getYear();
+      const currentDay = new Date().getDay();
       const icalData = Object.values(ical.parseICS(rawIcalData));
       const days = [];
 
@@ -68,7 +69,7 @@ export default {
         return (entryStartYear === currentYear && entryStartMonth === currentMonth) || (entryEndMonth === currentMonth && entryEndYear === currentYear);
       });
 
-      const firstDayOfMonth = (new Date()).getDay();
+      const firstDayOfMonth = new Date(new Date().getFullYear(), currentMonth, 1).getDay() + 1;
       const daysInMonth = 32 - (new Date(new Date().getYear(), new Date().getMonth(), 32).getDate());
 
       let daysCreated = 1;
@@ -77,9 +78,11 @@ export default {
           if (daysCreated > daysInMonth) break;
           const dayIsInMonth = (row === 2 && column >= firstDayOfMonth) || row > 2;
           const dayNumber = dayIsInMonth ? cloneDeep(daysCreated) : '';
+          const isCurrentDay = dayNumber === currentDay;
           const dateTimeOfDay = dayIsInMonth ? new Date(new Date().getFullYear(), currentMonth, dayNumber, 12, 0, 0, 0) : null;
           const day = {
             number: dayNumber,
+            isCurrentDay,
             gridRow: row,
             gridColumn: column,
             events: [],
@@ -149,6 +152,10 @@ export default {
     &--number {
       width: 100%;
       text-align: right;
+      &.current {
+        color: black;
+        background: rgba($color: #ffffff, $alpha: 0.8);
+      }
     }
 
     &--alldayevent {

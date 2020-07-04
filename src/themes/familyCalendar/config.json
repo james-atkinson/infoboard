@@ -55,6 +55,44 @@
             "columnStart": 4,
             "columnEnd": 13
           }
+        },
+        "NewsFeedWidget": {
+          "config": {
+            "sources": [
+              {
+                "title": "CBC Canada News",
+                "url": "http://rss.cbc.ca/lineup/canada.xml",
+                "type": "RSS"
+              },
+              {
+                "title": "CBC World News",
+                "url": "http://rss.cbc.ca/lineup/world.xml",
+                "type": "RSS"
+              },
+              {
+                "title": "CBC Hockey",
+                "url": "http://rss.cbc.ca/lineup/sports-nhl.xml",
+                "type": "RSS"
+              },
+              {
+                "title": "CBC Edmonton News",
+                "url": "http://rss.cbc.ca/lineup/canada-edmonton.xml",
+                "type": "RSS"
+              },
+              {
+                "title": "/r/politics",
+                "url": "https://www.reddit.com/r/politics/hot.json",
+                "type": "reddit"
+              }
+            ],
+            "interval": 30
+          },
+          "position": {
+            "rowStart": 11,
+            "rowEnd": 12,
+            "columnStart": 1,
+            "columnEnd": 13
+          }
         }
       }
     },
