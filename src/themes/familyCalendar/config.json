@@ -47,6 +47,18 @@
             "columnEnd": 4
           }
         },
+        "EventsWidget": {
+          "config": {
+            "title": "Upcoming Events",
+            "lookAhead": 7
+          },
+          "position": {
+            "rowStart": 3,
+            "rowEnd": 6,
+            "columnStart": 1,
+            "columnEnd": 4
+          }
+        },
         "ICalCalendarWidget": {
           "config": {},
           "position": {

@@ -54,7 +54,7 @@ export default {
       if (!rawIcalData) return [];
       const currentMonth = new Date().getMonth();
       const currentYear = new Date().getYear();
-      const currentDay = new Date().getDay();
+      const currentDay = new Date().getDate();
       const icalData = Object.values(ical.parseICS(rawIcalData));
       const days = [];
 
@@ -154,6 +154,7 @@ export default {
       text-align: right;
       &.current {
         color: black;
+        border-top: solid 1px black;
         background: rgba($color: #ffffff, $alpha: 0.8);
       }
     }

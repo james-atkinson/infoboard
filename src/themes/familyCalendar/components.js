@@ -8,6 +8,7 @@ const layers = {
 
 const widgets = {
   DateTimeWidget: () => import('./widgets/DateTimeWidget.vue'),
+  EventsWidget: () => import('./widgets/EventsWidget.vue'),
   ICalCalendarWidget: () => import('./widgets/ICalCalendarWidget.vue'),
   NewsFeedWidget: () => import('./widgets/NewsFeedWidget.vue'),
 };
