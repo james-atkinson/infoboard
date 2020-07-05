@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     async fetchData(fetchUrl) {
-      const fetchResult = await axios.get(`${serverUrl}/api/fetchData?url=${fetchUrl}`);
+      const fetchResult = await axios.get(`${serverUrl}/api/fetchData?url=${encodeURIComponent(fetchUrl)}`);
       if (fetchResult.status === 200) {
         this.$store.dispatch(this.config.storeAction, {
           key: this.config.storeKey,

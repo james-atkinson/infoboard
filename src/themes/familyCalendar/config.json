@@ -59,6 +59,23 @@
             "columnEnd": 4
           }
         },
+        "WeatherWidget": {
+          "config": {
+            "title": "Weather Forecast",
+            "locationId": "5946768",
+            "appId": "32556db6208f4d04037ab16dce59f2db",
+            "units": "metric",
+            "roundTemp": true,
+            "includeForecast": true,
+            "interval": 30
+          },
+          "position": {
+            "rowStart": 6,
+            "rowEnd": 11,
+            "columnStart": 1,
+            "columnEnd": 4
+          }
+        },
         "ICalCalendarWidget": {
           "config": {},
           "position": {

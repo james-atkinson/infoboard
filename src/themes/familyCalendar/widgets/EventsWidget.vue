@@ -5,17 +5,22 @@
     <div
       v-for="event in events"
       :key="event.title"
-      class="events__event">
-        <div class="events__event--title">{{ event.title }}</div>
-        <div class="events__event--when">{{ event.when }}</div>
+      class="events__event"
+    >
+      <div class="events__event--icon">
+        <span :class="`mdi ${event.isAllDay ? 'mdi-calendar-check' : 'mdi-calendar-clock'}`"></span>
       </div>
+      <div class="events__event--title">{{ event.title }}</div>
+      <div class="events__event--when">{{ event.when }}</div>
+    </div>
+    <div v-if="events.length === 0">No {{ config.title }}</div>
   </div>
 </template>
 <script>
 import ical from 'ical';
 import { mapState } from 'vuex';
 import {
-  add, formatDistance, isBefore, isAfter,
+  add, formatDistance, isBefore, isAfter, isSameDay,
 } from 'date-fns';
 
 export default {
@@ -45,12 +50,11 @@ export default {
 
         const today = new Date();
         const furthestAhead = add(today, { days: this.config.lookAhead });
-        console.log('dates: ', entry.start, today, furthestAhead);
-        console.log('isBefore: ', isBefore(entry.start, furthestAhead));
 
         return isAfter(entry.start, today) && isBefore(entry.start, furthestAhead);
       }).map((event) => ({
         title: event.summary,
+        isAllDay: !isSameDay(event.start, event.end),
         when: formatDistance(event.start, new Date(), { addSuffix: true }).replace('about ', ''),
       }));
     },
@@ -72,12 +76,19 @@ export default {
     width: 100%;
     height: 0.3rem;
     border-bottom: solid 1px white;
+    margin-bottom: 0.7rem;
   }
 
   &__event {
     display: flex;
     flex-direction: row;
     font-size: 1.4rem;
+
+    &--icon {
+      margin-right: 0.3rem;
+      font-size: 1rem;
+      align-self: baseline;
+    }
 
     &--title {
       flex-grow: 1;

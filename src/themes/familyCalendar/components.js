@@ -11,6 +11,7 @@ const widgets = {
   EventsWidget: () => import('./widgets/EventsWidget.vue'),
   ICalCalendarWidget: () => import('./widgets/ICalCalendarWidget.vue'),
   NewsFeedWidget: () => import('./widgets/NewsFeedWidget.vue'),
+  WeatherWidget: () => import('./widgets/WeatherWidget.vue'),
 };
 
 const data = {};
