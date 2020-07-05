@@ -3,8 +3,8 @@ const { app, BrowserWindow } = require('electron'); // eslint-disable-line
 const createWindow = () => {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1920,
+    height: 1080,
     webPreferences: {
       nodeIntegration: true,
     },
