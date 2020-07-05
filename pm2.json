@@ -1,0 +1,6 @@
+{
+  "apps" : [{
+    "name"        : "infoboard",
+    "script"      : "/home/pi/infoboard/start-pi.sh"
+  }]
+}
