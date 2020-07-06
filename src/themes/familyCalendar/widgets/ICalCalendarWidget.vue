@@ -3,25 +3,27 @@
     <div class="icalcalendar__header">
       {{ currentMonth }} {{ currentYear }}
     </div>
-    <div
-      v-for="(day, index) in days"
-      :key="index"
-      :style="`grid-area: ${day.gridRow} / ${day.gridColumn} / ${day.gridRow} / ${day.gridColumn};`"
-      class="icalcalendar__day"
-    >
+    <div class="icalcalendar__body">
       <div
-        v-if="day.gridRow === 2"
-        class="icalcalendar__day--header"
+        v-for="(day, index) in days"
+        :key="index"
+        :style="`grid-area: ${day.gridRow} / ${day.gridColumn} / ${day.gridRow} / ${day.gridColumn};`"
+        class="icalcalendar__day"
       >
-        {{ daysOfTheWeek[index] }}
-      </div>
-      <div :class="`icalcalendar__day--number ${day.isCurrentDay ? 'current' :''}`">{{ day.number }}</div>
-      <div
-        v-for="event in day.events"
-        :key="event.uid"
-        :class="`icalcalendar__day--${event.isAllDay ? 'alldayevent' : 'event'}`"
-      >
-        {{ event.summary }}
+        <div
+          v-if="day.gridRow === 1"
+          class="icalcalendar__day--header"
+        >
+          {{ daysOfTheWeek[index] }}
+        </div>
+        <div :class="`icalcalendar__day--number ${day.isCurrentDay ? 'current' :''}`">{{ day.number }}</div>
+        <div
+          v-for="event in day.events"
+          :key="event.uid"
+          :class="`icalcalendar__day--${event.isAllDay ? 'alldayevent' : 'event'}`"
+        >
+          {{ event.summary }}
+        </div>
       </div>
     </div>
   </div>
@@ -73,10 +75,10 @@ export default {
       const daysInMonth = 32 - (new Date(new Date().getYear(), new Date().getMonth(), 32).getDate());
 
       let daysCreated = 1;
-      for (let row = 2; row < 8; row++) { // eslint-disable-line
+      for (let row = 1; row < 7; row++) { // eslint-disable-line
         for (let column = 1; column < 8; column++) { // eslint-disable-line
           if (daysCreated > daysInMonth) break;
-          const dayIsInMonth = (row === 2 && column >= firstDayOfMonth) || row > 2;
+          const dayIsInMonth = (row === 1 && column >= firstDayOfMonth) || row > 1;
           const dayNumber = dayIsInMonth ? cloneDeep(daysCreated) : '';
           const isCurrentDay = dayNumber === currentDay;
           const dateTimeOfDay = dayIsInMonth ? new Date(new Date().getFullYear(), currentMonth, dayNumber, 12, 0, 0, 0) : null;
@@ -119,18 +121,22 @@ export default {
 </script>
 <style lang="scss" scoped>
 .icalcalendar {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  margin-right: 1rem;
+
+  &__body {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    max-height: 90%;
+  }
 
   &__header {
+    width: 100%;
+    max-height: 10%;
     color: white;
-    grid-area: 1 / 1 / 1 / 8;
     font-size: 3.2rem;
     font-weight: 800;
     text-align: right;
-    align-self: end;
   }
 
   &__day {

@@ -12,6 +12,7 @@ const widgets = {
   ICalCalendarWidget: () => import('./widgets/ICalCalendarWidget.vue'),
   NewsFeedWidget: () => import('./widgets/NewsFeedWidget.vue'),
   WeatherWidget: () => import('./widgets/WeatherWidget.vue'),
+  WeatherRadarWidget: () => import('./widgets/WeatherRadarWidget.vue'),
 };
 
 const data = {};

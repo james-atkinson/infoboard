@@ -490,7 +490,7 @@ export default {
 
   display: grid;
   grid-template-columns: repeat(24, 1fr);
-  grid-template-rows: repeat(24, 1fr);
+  grid-template-rows: repeat(14, 1fr);
 
   &__current {
     grid-area: 1 / 1 / 6 / 25;
@@ -498,13 +498,11 @@ export default {
 
     &--temp {
       font-size: 5.5rem;
-      line-height: 1.5rem;
-      margin-bottom: 2rem;
     }
   }
 
   &__wind-sun {
-    grid-area: 6 / 1 / 9 / 25;
+    grid-area: 6 / 1 / 8 / 25;
 
     display: flex;
     flex-direction: row;
@@ -518,7 +516,7 @@ export default {
   }
 
   &__forecast {
-    grid-area: 9 / 1 / 25 / 25;
+    grid-area: 8 / 1 / 14 / 25;
 
     &--title {
       text-align: left;

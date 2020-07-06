@@ -1,8 +1,8 @@
 {
   "name": "familyCalendar",
   "canvas": {
-    "width": "1920px",
-    "height": "1080px",
+    "width": "1820px",
+    "height": "983px",
     "backgroundColor": "black"
   },
   "layers": {
@@ -24,9 +24,9 @@
           },
           "position": {
             "rowStart": 1,
-            "rowEnd": 13,
+            "rowEnd": 37,
             "columnStart": 1,
-            "columnEnd": 13
+            "columnEnd": 37
           }
         }
       }
@@ -42,9 +42,9 @@
           "config": {},
           "position": {
             "rowStart": 1,
-            "rowEnd": 3,
+            "rowEnd": 8,
             "columnStart": 1,
-            "columnEnd": 4
+            "columnEnd": 9
           }
         },
         "EventsWidget": {
@@ -53,10 +53,10 @@
             "lookAhead": 14
           },
           "position": {
-            "rowStart": 3,
-            "rowEnd": 6,
+            "rowStart": 8,
+            "rowEnd": 16,
             "columnStart": 1,
-            "columnEnd": 4
+            "columnEnd": 9
           }
         },
         "WeatherWidget": {
@@ -70,19 +70,19 @@
             "interval": 30
           },
           "position": {
-            "rowStart": 6,
-            "rowEnd": 11,
+            "rowStart": 16,
+            "rowEnd": 29,
             "columnStart": 1,
-            "columnEnd": 4
+            "columnEnd": 9
           }
         },
         "ICalCalendarWidget": {
           "config": {},
           "position": {
             "rowStart": 1,
-            "rowEnd": 11,
-            "columnStart": 4,
-            "columnEnd": 13
+            "rowEnd": 30,
+            "columnStart": 9,
+            "columnEnd": 37
           }
         },
         "NewsFeedWidget": {
@@ -117,10 +117,10 @@
             "interval": 30
           },
           "position": {
-            "rowStart": 11,
-            "rowEnd": 12,
-            "columnStart": 1,
-            "columnEnd": 13
+            "rowStart": 30,
+            "rowEnd": 35,
+            "columnStart": 9,
+            "columnEnd": 37
           }
         }
       }

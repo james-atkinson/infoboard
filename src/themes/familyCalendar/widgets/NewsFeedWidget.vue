@@ -103,18 +103,20 @@ export default {
     setInterval(processSources, this.config.interval * 60 * 1000);
     setTimeout(() => {
       updateActiveArtical();
-      setInterval(updateActiveArtical, 15 * 1000);
-    }, 7.5 * 1000);
+      setInterval(updateActiveArtical, 10 * 1000);
+    }, 5 * 1000);
   },
 };
 </script>
 <style lang="scss" scoped>
 .newsfeed {
   color: white;
-  padding-top: 1.5rem;
+  padding-top: 0.3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
-  -webkit-animation: fadeinout 15s infinite;
-  animation: fadeinout 15s infinite;
+  -webkit-animation: fadeinout 10s infinite;
+  animation: fadeinout 10s infinite;
   opacity: 1;
 
   &__source {

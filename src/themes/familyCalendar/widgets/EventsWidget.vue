@@ -65,7 +65,7 @@ export default {
 .events {
   color: white;
   font-size: 1.1rem;
-  margin: 1rem 0.7rem 1rem 0.7rem;
+  margin-left: 0.7rem;
 
   &__title {
     width: 100%;

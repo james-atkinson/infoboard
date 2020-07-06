@@ -111,7 +111,8 @@ export default {
     const configPath = `${serverUrl}/api/config`;
     const serverResponse = await axios.get(configPath);
     const serverResponseGood = serverResponse.status === 200;
-    const themeConfig = serverResponseGood ? serverResponse.data.configuredThemeConfig : {};
+    console.log('resp: ', serverResponse);
+    const themeConfig = serverResponseGood ? serverResponse.data : {};
 
     this.$store.dispatch('setConfig', { config: themeConfig });
   },
@@ -121,8 +122,8 @@ export default {
 <style lang="scss">
 .grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(12, 1fr);
+  grid-template-columns: repeat(36, 1fr);
+  grid-template-rows: repeat(36, 1fr);
 
   width: 100%;
   height: 100%;
