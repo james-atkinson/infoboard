@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div v-if="canvasConfig">
     <div
       class="canvas"
       :style="`
-        width: ${config.width};
-        height: ${config.height};
-        background-color: ${config.backgroundColor};`"
+        width: ${canvasConfig.width};
+        height: ${canvasConfig.height};
+        background-color: ${canvasConfig.backgroundColor};`"
     >
       <component
         v-for="layer in displayLayers"
