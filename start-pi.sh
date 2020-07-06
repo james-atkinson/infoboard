@@ -4,5 +4,5 @@ fi
 cd ~/infoboard
 yarn start:server > /dev/null &
 yarn start:client > /dev/null &
-sleep 40
+sleep 10
 ./node_modules/.bin/electron electron.js
