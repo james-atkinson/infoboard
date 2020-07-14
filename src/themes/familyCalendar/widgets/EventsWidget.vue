@@ -4,7 +4,7 @@
     <div class="events__separator"></div>
     <div
       v-for="event in events"
-      :key="event.title"
+      :key="`${event.title}-${event.start.getTime()}`"
       class="events__event"
     >
       <div class="events__event--icon">

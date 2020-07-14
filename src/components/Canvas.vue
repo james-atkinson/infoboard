@@ -111,7 +111,6 @@ export default {
     const configPath = `${serverUrl}/api/config`;
     const serverResponse = await axios.get(configPath);
     const serverResponseGood = serverResponse.status === 200;
-    console.log('resp: ', serverResponse);
     const themeConfig = serverResponseGood ? serverResponse.data : {};
 
     this.$store.dispatch('setConfig', { config: themeConfig });
