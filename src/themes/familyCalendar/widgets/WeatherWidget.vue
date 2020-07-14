@@ -15,7 +15,7 @@
               {{ ((currentWeather.wind.speed * 60 * 60) / 1000).toFixed(0) }}</span><sup>{{ getWindDirection(currentWeather.wind.deg) }}</sup>
         </div>
         <div class="weather__wind-sun--sun">
-          <span :class="`mdi ${sunUpDown.icon}`"></span>{{ sunUpDown.time }}
+          <span class="mdi mdi-weather-sunset-up"></span>{{ sunUp }} <span class="mdi mdi-weather-sunset-down"></span>{{ sunDown }}
         </div>
       </div>
       <div
@@ -48,7 +48,7 @@
 </template>
 <script>
 import { mapState } from 'vuex';
-import { format, isBefore, isSameDay } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 import GenericDataFetcher from '../../../components/data/GenericDataFetcher.vue';
 
 const weatherTypes = {
@@ -359,10 +359,6 @@ export default {
     currentWeatherFetcherConfig: {},
     forecastFetcherConfig: {},
     weatherTypes,
-    sunUpDown: {
-      icon: 'mdi-weather-sunset-up',
-      time: null,
-    },
   }),
   computed: {
     ...mapState({
@@ -398,6 +394,12 @@ export default {
 
       return result;
     },
+    sunUp() {
+      return format(new Date(this.currentWeather.sys.sunrise * 1000), 'hh:mm aa');
+    },
+    sunDown() {
+      return format(new Date(this.currentWeather.sys.sunset * 1000), 'hh:mm aa');
+    },
   },
   created() {
     const currentWeatherUrl = `http://api.openweathermap.org/data/2.5/weather?APPID=${this.config.appId}&lang=en&units=${this.config.units}&id=${this.config.locationId}`;
@@ -418,28 +420,6 @@ export default {
       storeKey: 'weatherForecast',
       interval: this.config.interval,
     };
-
-    const determineSunUpDown = () => {
-      if (!this.currentWeather) return;
-      const current = new Date();
-      const sunset = new Date(this.currentWeather.sys.sunset * 1000);
-      const sunrise = new Date(this.currentWeather.sys.sunrise * 1000);
-
-      if (isBefore(current, sunrise) && isBefore(current, sunset)) {
-        this.sunUpDown.icon = 'mdi-weather-sunset-up';
-        this.sunUpDown.time = format(sunrise, 'hh:mm aa');
-      } else {
-        this.sunUpDown.icon = 'mdi-weather-sunset-down';
-        this.sunUpDown.time = format(sunset, 'hh:mm aa');
-      }
-    };
-
-    setTimeout(() => {
-      determineSunUpDown();
-      setInterval(() => {
-        determineSunUpDown();
-      }, 1 * 60 * 60 * 1000);
-    }, 5 * 1000);
   },
   methods: {
     roundTemp(temp) {
@@ -507,11 +487,15 @@ export default {
     display: flex;
     flex-direction: row;
 
-    font-size: 2rem;
-
     &--wind {
+      margin: auto;
+      font-size: 2rem;
       sup { font-size: 1rem; }
-      margin-right: 2rem;
+    }
+
+    &--sun {
+      margin: auto;
+      font-size: 1.3rem;
     }
   }
 
