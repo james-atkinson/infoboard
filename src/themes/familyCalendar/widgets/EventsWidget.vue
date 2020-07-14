@@ -55,8 +55,10 @@ export default {
       }).map((event) => ({
         title: event.summary,
         isAllDay: !isSameDay(event.start, event.end),
+        start: event.start,
         when: formatDistance(event.start, new Date(), { addSuffix: true }).replace('about ', ''),
-      }));
+      }))
+        .sort((a, b) => a.start.getTime() - b.start.getTime());
     },
   },
 };
