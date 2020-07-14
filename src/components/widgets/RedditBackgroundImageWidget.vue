@@ -70,7 +70,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .background {
-  opacity: 0.2;
+  opacity: 0.3;
   background-repeat: no-repeat;
   background-size: cover;
 
