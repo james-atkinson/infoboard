@@ -39,7 +39,7 @@ export default {
   }
 
   &__date {
-    font-size: 2rem;
+    font-size: 1.5rem;
     padding-left: 0.6rem;
   }
 }
