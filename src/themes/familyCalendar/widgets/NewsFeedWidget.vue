@@ -1,8 +1,10 @@
 <template>
   <div class="newsfeed">
     <div v-if="articles.length > 0">
-      <div class="newsfeed__source">{{ articles[activeArticleNumber].source }}, {{ articles[activeArticleNumber].displayDate }}:</div>
-      <div class="newsfeed__headline">{{ articles[activeArticleNumber].title }}</div>
+      <div :class="fadeClass">
+        <div class="newsfeed__source">{{ articles[activeArticleNumber].source }}, {{ articles[activeArticleNumber].displayDate }}:</div>
+        <div class="newsfeed__headline">{{ articles[activeArticleNumber].title }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -75,11 +77,15 @@ export default {
   data: () => ({
     activeArticleNumber: 0,
     articles: [],
+    fadeClass: 'fadeout',
   }),
   created() {
-    const updateActiveArtical = () => {
+    const updateActiveArtical = async () => {
       const resetCounter = this.activeArticleNumber + 1 > this.articles.length - 1;
+      this.fadeClass = 'newsfeed__fadeout';
+      await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
       this.activeArticleNumber = resetCounter ? 0 : this.activeArticleNumber + 1;
+      this.fadeClass = 'newsfeed__fadein';
     };
 
     const processSources = () => {
@@ -101,10 +107,8 @@ export default {
     processSources();
 
     setInterval(processSources, this.config.interval * 60 * 1000);
-    setTimeout(() => {
-      updateActiveArtical();
-      setInterval(updateActiveArtical, 10 * 1000);
-    }, 5 * 1000);
+    updateActiveArtical();
+    setInterval(updateActiveArtical, 15 * 1000);
   },
 };
 </script>
@@ -114,10 +118,6 @@ export default {
   padding-top: 0.3rem;
   overflow: hidden;
   text-overflow: ellipsis;
-
-  -webkit-animation: fadeinout 10s infinite;
-  animation: fadeinout 10s infinite;
-  opacity: 1;
 
   &__source {
     font-size: 1.1rem;
@@ -129,21 +129,34 @@ export default {
     font-weight: 800;
     color: white;
   }
+
+  &__fadeout {
+    animation: fadeout 2s;
+  }
+
+  &__fadein {
+    animation: fadein 2s;
+  }
 }
 
-@-webkit-keyframes fadeinout {
+@-webkit-keyframes fadeout {
   0%   { opacity: 1; }
-  45%  { opacity: 1; }
-  50%  { opacity: 0; }
-  65%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes fadeout {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@-webkit-keyframes fadein {
+  0%   { opacity: 0; }
   100% { opacity: 1; }
 }
 
-@keyframes fadeinout {
-  0%   { opacity: 1; }
-  45%  { opacity: 1; }
-  50%  { opacity: 0; }
-  65%  { opacity: 1; }
+@keyframes fadein {
+  0%   { opacity: 0; }
   100% { opacity: 1; }
 }
+
 </style>
