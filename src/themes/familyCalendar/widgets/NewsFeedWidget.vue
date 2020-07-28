@@ -77,15 +77,16 @@ export default {
   data: () => ({
     activeArticleNumber: 0,
     articles: [],
-    fadeClass: 'fadeout',
+    fadeClass: 'newsfeed__fadein',
   }),
   created() {
     const updateActiveArtical = async () => {
       const resetCounter = this.activeArticleNumber + 1 > this.articles.length - 1;
-      this.fadeClass = 'newsfeed__fadeout';
+      this.fadeClass = 'newsfeed__fader';
       await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
       this.activeArticleNumber = resetCounter ? 0 : this.activeArticleNumber + 1;
-      this.fadeClass = 'newsfeed__fadein';
+      await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
+      this.fadeClass = '';
     };
 
     const processSources = () => {
@@ -130,33 +131,21 @@ export default {
     color: white;
   }
 
-  &__fadeout {
-    animation: fadeout 2s;
-  }
-
-  &__fadein {
-    animation: fadein 2s;
+  &__fader {
+    animation-name: fadeit;
+    animation-duration: 2s;
+    animation-iteration-count: 2;
+    animation-direction: alternate;
   }
 }
 
-@-webkit-keyframes fadeout {
+@-webkit-keyframes fadeit {
   0%   { opacity: 1; }
   100% { opacity: 0; }
 }
 
-@keyframes fadeout {
+@keyframes fadeit {
   0%   { opacity: 1; }
   100% { opacity: 0; }
 }
-
-@-webkit-keyframes fadein {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-@keyframes fadein {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
-}
-
 </style>
