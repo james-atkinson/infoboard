@@ -1,8 +1,5 @@
-import Vue from 'vue';
 import Vuex from 'vuex';
 import * as themeComponents from '../themes/themeComponents';
-
-Vue.use(Vuex);
 
 const SET_CONFIG = 'SET_CONFIG';
 const SET_DATA = 'SET_DATA';
@@ -13,7 +10,7 @@ for (const [key, value] of Object.entries(themeComponents)) { // eslint-disable-
   storeModules[key] = value.store;
 }
 
-export default new Vuex.Store({
+export default Vuex.createStore({
   modules: storeModules,
   state: {
     config: {},
@@ -24,7 +21,8 @@ export default new Vuex.Store({
       state.config = config;
     },
     [SET_DATA](state, { key, data }) { // eslint-disable-line
-      Vue.set(state.data, key, data);
+      state.data[key] = data;
+      // set(state.data, key, data);
     },
   },
   actions: {

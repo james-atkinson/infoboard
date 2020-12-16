@@ -1,6 +1,8 @@
+import { defineAsyncComponent } from 'vue';
+
 const widgets = {
-  RedditBackgroundImageWidget: () => import('./RedditBackgroundImageWidget.vue'),
-  StaticBackgroundImageWidget: () => import('./StaticBackgroundImageWidget.vue'),
+  RedditBackgroundImageWidget: defineAsyncComponent(() => import('./RedditBackgroundImageWidget.vue')),
+  StaticBackgroundImageWidget: defineAsyncComponent(() => import('./StaticBackgroundImageWidget.vue')),
 };
 
 export default widgets;

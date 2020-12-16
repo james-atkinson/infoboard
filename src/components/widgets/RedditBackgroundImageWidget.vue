@@ -42,12 +42,14 @@ export default {
       const filteredImages = this.redditData ? this.redditData.filter((item) => {
         const itemAspectRatio = Math.round((item?.data?.preview?.images[0]?.source?.width / item?.data?.preview?.images[0]?.source?.height) * 10) / 10;
         return this.config.ignoreAspectRatio ? true : itemAspectRatio === aspectRatio;
-      }).map((item) => ({
-        url: item?.data?.url,
-        title: item?.data?.title,
-        author: item?.data?.author,
-        score: item?.data?.score,
-      })) : [];
+      })
+        .filter((item) => !item?.data?.url.includes('gallery'))
+        .map((item) => ({
+          url: item?.data?.url,
+          title: item?.data?.title,
+          author: item?.data?.author,
+          score: item?.data?.score,
+        })) : [];
 
       if (this.config.selectionType === 'highest') {
         const sortedImages = filteredImages.sort((a, b) => b.score - a.score);
@@ -57,6 +59,7 @@ export default {
       if (this.config.selectionType === 'random') {
         const random = Math.floor(Math.random() * Math.floor(filteredImages.length - 1));
         const image = filteredImages[random];
+        console.log('image: ', image);
         return { url: image?.url, credit: `${image?.title} by ${image?.author}` };
       }
 

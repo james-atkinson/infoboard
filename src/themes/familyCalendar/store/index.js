@@ -1,12 +1,11 @@
-import Vue from 'vue';
-
 const SET_DATA = 'SET_DATA';
 
 const state = {};
 
 const mutations = {
   [SET_DATA](state, { key, data }) { // eslint-disable-line
-    Vue.set(state, key, data);
+    // set(state, key, data);
+    state[key] = data;
   },
 };
 

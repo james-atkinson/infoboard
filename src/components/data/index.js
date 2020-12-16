@@ -1,5 +1,7 @@
+import { defineAsyncComponent } from 'vue';
+
 const dataComponents = {
-  GenericDataFetcher: () => import('./GenericDataFetcher.vue'),
+  GenericDataFetcher: defineAsyncComponent(() => import('./GenericDataFetcher.vue')),
 };
 
 export default dataComponents;
