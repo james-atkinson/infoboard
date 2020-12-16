@@ -22,6 +22,7 @@ const createExpressServer = (serverOptions) => {
     origin: 'http://localhost:8080',
   }));
 
+  expressApp.use(express.static(serverOptions.root));
   expressApp.use(bodyParser.json());
   expressApp.use(bodyParser.urlencoded({ extended: true }));
 
