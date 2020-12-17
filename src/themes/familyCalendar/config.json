@@ -63,7 +63,7 @@
           "config": {
             "title": "Weather Forecast",
             "locationId": "5946768",
-            "appId": "[ YOUR APP ID HERE ]",
+            "appId": "32556db6208f4d04037ab16dce59f2db",
             "units": "metric",
             "roundTemp": true,
             "includeForecast": true,
@@ -138,7 +138,7 @@
     "GenericDataFetcher": {
       "config": {
         "immediate": true,
-        "fetchUrl": "[ YOUR CALENDAR ICS FILE HERE ]",
+        "fetchUrl": "https://calendar.google.com/calendar/ical/43qdrbpgrlb9uqn2585or2bavs%40group.calendar.google.com/private-7106fe3b84123d2ada29cf23537fa78c/basic.ics",
         "storeAction": "familyCalendar/setData",
         "storeKey": "calendarData",
         "interval": 30
