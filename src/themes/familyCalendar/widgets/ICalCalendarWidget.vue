@@ -143,7 +143,7 @@ export default {
     color: white;
     background: rgba($color: #000000, $alpha: 0.5);
     border: solid 1px rgba($color: #ffffff, $alpha: 0.5);
-    max-width: 15rem;
+    max-width: 13rem;
     font-weight: 500;
 
     &--header {
