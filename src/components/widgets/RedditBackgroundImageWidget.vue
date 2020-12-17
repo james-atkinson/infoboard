@@ -59,7 +59,6 @@ export default {
       if (this.config.selectionType === 'random') {
         const random = Math.floor(Math.random() * Math.floor(filteredImages.length - 1));
         const image = filteredImages[random];
-        console.log('image: ', image);
         return { url: image?.url, credit: `${image?.title} by ${image?.author}` };
       }
 

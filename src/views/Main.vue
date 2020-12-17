@@ -1,6 +1,13 @@
 <template>
   <div>
-    <Canvas :config="canvasConfig"/>
+    <Suspense>
+      <template #default>
+        <Canvas :config="canvasConfig"/>
+      </template>
+      <template #fallback>
+        <span>Loading ...</span>
+      </template>
+    </Suspense>
   </div>
 </template>
 

@@ -28,7 +28,8 @@
 
 <script>
 import axios from 'axios';
-import { mapState } from 'vuex';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 import { serverUrl } from '../config.json';
 import * as themeComponents from '../themes/themeComponents';
 import widgets from './widgets';
@@ -42,24 +43,31 @@ export default {
       required: true,
     },
   },
-  computed: {
-    ...mapState({
-      themeName: (state) => state.config.name,
-      canvasConfig: (state) => state.config.canvas,
-      layers: (state) => state.config.layers,
-      dataComponents: (state) => state.config.data,
-    }),
-    displayLayers() {
-      if (!this.themeName) return {};
-      if (!themeComponents[this.themeName]) return {};
-      return Object.keys(this.layers).map((componentName) => {
-        if (themeComponents[this.themeName] && themeComponents[this.themeName].layers[componentName]) {
+  async setup() {
+    const store = useStore();
+    const themeName = computed(() => store.state.config.name);
+    const canvasConfig = computed(() => store.state.config.canvas);
+    const layers = computed(() => store.state.config.layers);
+    const storeDataComponents = computed(() => store.state.config.data);
+
+    const configPath = `${serverUrl}/api/config`;
+    const serverResponse = await axios.get(configPath);
+    const serverResponseGood = serverResponse.status === 200;
+    const themeConfig = serverResponseGood ? serverResponse.data : {};
+
+    store.dispatch('setConfig', { config: themeConfig });
+
+    const displayLayers = computed(() => {
+      if (!themeName.value) return {};
+      if (!themeComponents[themeName.value]) return {};
+      return Object.keys(layers.value).map((componentName) => {
+        if (themeComponents[themeName.value] && themeComponents[themeName.value].layers[componentName]) {
           return {
             id: componentName,
-            component: themeComponents[this.themeName].layers[componentName],
-            config: this.layers[componentName].config,
-            zIndex: this.layers[componentName].zIndex,
-            widgets: this.layers[componentName].widgets,
+            component: themeComponents[themeName.value].layers[componentName],
+            config: layers.value[componentName].config,
+            zIndex: layers.value[componentName].zIndex,
+            widgets: layers.value[componentName].widgets,
           };
         }
 
@@ -67,29 +75,30 @@ export default {
           return {
             id: componentName,
             component: widgets[componentName],
-            config: this.layers[componentName].config,
-            zIndex: this.layers[componentName].zIndex,
-            widgets: this.layers[componentName].widgets,
+            config: layers.value[componentName].config,
+            zIndex: layers.value[componentName].zIndex,
+            widgets: layers.value[componentName].widgets,
           };
         }
 
         return {};
       });
-    },
-    validDataComponents() {
-      if (!this.themeName) return {};
-      if (!themeComponents[this.themeName]) return {};
-      if (!this.dataComponents) return {};
+    });
+
+    const validDataComponents = computed(() => {
+      if (!themeName.value) return {};
+      if (!themeComponents[themeName.value]) return {};
+      if (!storeDataComponents.value) return {};
 
       const globalDataComponents = dataComponents;
-      const themeDataComponents = themeComponents[this.themeName].data;
+      const themeDataComponents = themeComponents[themeName.value].data;
 
-      const result = Object.keys(this.dataComponents).map((componentName) => {
+      const result = Object.keys(storeDataComponents.value).map((componentName) => {
         if (globalDataComponents[componentName]) {
           return {
             id: componentName,
             component: globalDataComponents[componentName],
-            config: this.dataComponents[componentName].config,
+            config: storeDataComponents.value[componentName].config,
           };
         }
 
@@ -97,7 +106,7 @@ export default {
           return {
             id: componentName,
             component: themeDataComponents[componentName],
-            config: this.dataComponents[componentName].config,
+            config: storeDataComponents.value[componentName].config,
           };
         }
 
@@ -105,15 +114,19 @@ export default {
       }).filter((component) => component !== false);
 
       return result;
-    },
-  },
-  async created() {
-    const configPath = `${serverUrl}/api/config`;
-    const serverResponse = await axios.get(configPath);
-    const serverResponseGood = serverResponse.status === 200;
-    const themeConfig = serverResponseGood ? serverResponse.data : {};
+    });
 
-    this.$store.dispatch('setConfig', { config: themeConfig });
+    const result = {
+      // Computeds
+      themeName,
+      canvasConfig,
+      layers,
+      storeDataComponents,
+      displayLayers,
+      validDataComponents,
+    };
+
+    return result;
   },
 };
 </script>
