@@ -12,7 +12,7 @@ async function startup() {
   const serverOptions = {
     appKey: 'infoboard',
     port: '9100',
-    root: path.resolve(__dirname, '../public'),
+    root: path.resolve(__dirname, './public'),
   };
   startServer(serverOptions);
 }
