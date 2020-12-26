@@ -200,6 +200,7 @@ export default {
         -webkit-border-radius: 7.5px;
         border-radius: 7.5px;
         background-color: rgb(248, 211, 45);
+        margin-right: 2px;
       }
     }
   }
