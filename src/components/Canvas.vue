@@ -9,6 +9,7 @@
     >
       <component
         v-for="layer in displayLayers"
+        class="canvas__layer"
         :key="layer.id"
         :is="layer.component"
         :ref="`layer-${layer.id}`"
@@ -147,6 +148,7 @@ export default {
   position: absolute;
   left: 0;
   top: 0;
+  cursor: none;
 }
 </style>
 
