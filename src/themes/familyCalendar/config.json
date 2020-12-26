@@ -1,8 +1,8 @@
 {
   "name": "familyCalendar",
   "canvas": {
-    "width": "1820px",
-    "height": "983px",
+    "width": "1920px",
+    "height": "1080px",
     "backgroundColor": "black"
   },
   "layers": {
