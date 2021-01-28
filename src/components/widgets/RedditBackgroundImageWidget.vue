@@ -44,6 +44,7 @@ export default {
         return this.config.ignoreAspectRatio ? true : itemAspectRatio === aspectRatio;
       })
         .filter((item) => !item?.data?.url.includes('gallery'))
+        .filter((item) => item?.data?.preview?.images.length > 0)
         .map((item) => ({
           url: item?.data?.url,
           title: item?.data?.title,
