@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css">
     <router-view/>
   </div>
 </template>

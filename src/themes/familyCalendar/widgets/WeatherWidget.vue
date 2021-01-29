@@ -5,8 +5,10 @@
         <div class="weather__current--temp">
           <span :class="`mdi ${weatherTypes[currentWeather.weather[0].id].icon}`"></span> {{ roundTemp(currentWeather.main.temp) }}&deg;
         </div>
-        <div class="weather__current--feels">
-          Feels like {{ roundTemp(currentWeather.main.feels_like) }}&deg;
+        <div class="weather__current--range">
+          <span class="mdi mdi-thermometer-high"></span> {{ roundTemp(currentWeather.main.temp_max )}}&deg;<br>
+          <span class="mdi mdi-thermometer-low"></span> {{ roundTemp(currentWeather.main.temp_min)}}&deg;<br>
+          <span :class="`mdi ${(currentWeather.main.temp > currentWeather.main.feels_like) ? 'mdi-weather-windy' : 'mdi-water-outline'}`"></span> {{ roundTemp(currentWeather.main.feels_like) }}&deg;
         </div>
       </div>
       <div class="weather__wind-sun">
@@ -473,16 +475,22 @@ export default {
   grid-template-rows: repeat(14, 1fr);
 
   &__current {
-    grid-area: 1 / 1 / 6 / 25;
+    grid-area: 1 / 1 / 5 / 25;
     text-align: left;
 
     &--temp {
       font-size: 5.5rem;
+      float: left;
+    }
+
+    &--range {
+      font-size: 1.5rem;
+      text-align: right;
     }
   }
 
   &__wind-sun {
-    grid-area: 6 / 1 / 8 / 25;
+    grid-area: 5 / 1 / 8 / 25;
 
     display: flex;
     flex-direction: row;
@@ -500,7 +508,7 @@ export default {
   }
 
   &__forecast {
-    grid-area: 8 / 1 / 14 / 25;
+    grid-area: 7 / 1 / 14 / 25;
 
     &--title {
       text-align: left;
