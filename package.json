@@ -26,7 +26,7 @@
     "express": "^4.17.1",
     "http": "^0.0.1-security",
     "ical": "^0.8.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "path": "^0.12.7",
     "vue": "^3.0.0-beta.1",
     "vue-router": "^4.0.0-alpha.6",
